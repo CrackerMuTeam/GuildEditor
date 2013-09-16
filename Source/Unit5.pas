@@ -1,0 +1,300 @@
+﻿unit Unit5;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DB, ADODB, StdCtrls,strUtils, ValEdit, ExtCtrls, Buttons,dec,
+  ComCtrls, Menus,
+  ToolWin, Grids;
+type
+  TForm5 = class(TForm)
+    BitBtn1: TBitBtn;
+    muQuery: TADOQuery;
+    GroupBox1: TGroupBox;
+    Label4: TLabel;
+    Label1: TLabel;
+    PaintBox1: TPaintBox;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label5: TLabel;
+    BitBtn2: TBitBtn;
+    BitBtn3: TBitBtn;
+    BitBtn4: TBitBtn;
+    StringGrid1: TStringGrid;
+    muupdate: TADOCommand;
+    Label6: TLabel;
+    Label7: TLabel;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure BitBtn4Click(Sender: TObject);
+    procedure BitBtn3Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure FormPaint(Sender: TObject);
+    procedure StringGrid1SelectCell(Sender: TObject; ACol, ARow: Integer;
+      var CanSelect: Boolean);
+    procedure iniciar;
+    procedure lista;
+    procedure info;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form5: TForm5;
+  rowmark:integer;
+implementation
+
+uses Unit2, Unit1;
+
+{$R *.dfm}
+ function bytetohex(src: byte): string;   {byte-->hex}
+begin
+  setlength(result, 2);
+  asm
+  mov edi, [result]
+  mov edi, [edi]
+  mov al, src
+  mov ah, al // ±£´æÖÁ ah
+  shr al, 4 // Êä³ö¸ß4Î»
+  add al, '0'
+  cmp al, '9'
+  jbe @@outcharlo
+  add al, 'a'-'9'-1
+@@outcharlo:
+  and ah, $f
+  add ah, '0'
+  cmp ah, '9'
+  jbe @@outchar
+  add ah, 'a'-'9'-1
+@@outchar:
+  stosw
+  end;
+end;
+                 {
+Function strByteSize(Value: Longint): String;
+
+Const
+KBYTE = Sizeof(Byte) shl 10;
+MBYTE = KBYTE shl 10;
+GBYTE = MBYTE shl 10;
+begin
+if Value > GBYTE then
+begin
+Result := FloatToStrF(Round(Value / GBYTE),ffNumber,6,0)+' GB';
+end
+else if Value > MBYTE then
+begin
+Result := FloatToStrF(Round(Value / MBYTE),ffNumber,6,0)+' MB';
+end
+else if Value > KBYTE then
+begin
+Result := FloatToStrF(Round(Value / KBYTE),ffNumber,6,0)+' KB';
+end
+else
+begin
+Result := FloatToStrF(Round(Value),ffNumber,6,0)+' Byte';
+end;
+end;                                             }
+procedure FillHexguild(item:Tfield); {Ìî³äÄ³¸öÕË»§µÄ²Ö¿â}
+type Tcharset=set of char;
+var A:tcharset;
+    itemblock:array of byte;
+    sWS,sItem,sUni:string;
+    wsrow,wscol,i,panelcount:integer;
+    j,k:integer;
+begin
+  a:=['0'..'7'];
+  with item do begin
+      setlength(itemblock,datasize);
+      try
+      getdata(itemblock);
+      {½ØÈ¡²Ö¿âµÄ16½øÖÆ´úÂë}
+      i:=2;
+      while i<=high(itemblock) do
+      begin
+        sws:=sws+uppercase(bytetohex(itemblock[i]));
+        inc(i);
+      end;
+
+{      for i:=2 to high(itemblock) do
+          sws:=sws+uppercase(bytetohex(itemblock[i]));
+ }
+
+      for wscol:=1 to 8 do
+        for wsrow:=1 to 8 do
+          begin
+            sitem:=midstr(sws,8*((wscol)-1)+1*((wsrow)-1)+1,1);
+           // form1.canvas.pen.Width:=8;
+      //      form1.Canvas.Pen.Mode := pmnotXor;
+      
+            if (sitem='0') then
+              form5.paintbox1.Canvas.Pen.Color:=clbtnface;
+            if (sitem='1') then
+              form5.paintbox1.Canvas.Pen.Color:=$000000;
+            if (sitem='2') then
+              form5.paintbox1.Canvas.Pen.Color:=$8c8a8d;
+            if (sitem='3') then
+              form5.paintbox1.Canvas.Pen.Color:=$ffffff;
+            if (sitem='4') then
+              form5.paintbox1.Canvas.Pen.Color:=$0000fe;
+            if (sitem='5') then
+              form5.paintbox1.Canvas.Pen.Color:=$008aff;
+            if (sitem='6') then
+              form5.paintbox1.Canvas.Pen.Color:=$ffff00;
+            if (sitem='7') then
+              form5.paintbox1.Canvas.Pen.Color:=$01FF8D;
+            if (sitem='8') then
+              form5.paintbox1.Canvas.Pen.Color:=$00ff00;
+            if (sitem='9') then
+              form5.paintbox1.Canvas.Pen.Color:=$8CFF01;
+            if (sitem='A') then
+              form5.paintbox1.Canvas.Pen.Color:=$00ffff;
+            if (sitem='B') then
+              form5.paintbox1.Canvas.Pen.Color:=$ff8a00;
+            if (sitem='C') then
+              form5.paintbox1.Canvas.Pen.Color:=$fe0000;
+            if (sitem='D') then
+              form5.paintbox1.Canvas.Pen.Color:=$FF008C;
+            if (sitem='E') then
+              form5.paintbox1.Canvas.Pen.Color:=$ff00fe;
+            if (sitem='F') then
+              form5.paintbox1.Canvas.Pen.Color:=$8C00FF;
+           // form1.Canvas.Ellipse(139+8*(wsrow), 8*(wscol), 139+8*(wsrow)+8, 8*(wscol)+8);
+            form5.paintbox1.Canvas.Rectangle(8*(wsrow)-8, 8*(wscol)-8, 8*(wsrow), 8*(wscol));
+            for j := 1 to 7 do
+              begin
+                form5.paintbox1.Canvas.MoveTo(8*(wsrow)-8, 8*(wscol)+j-8);
+				      	form5.paintbox1.Canvas.LineTo(8*(wsrow), 8*(wscol)+j-8);
+              end;
+          end;
+
+
+      except
+      on E:exception do application.MessageBox(pchar(e.Message),pchar(errorcaption),mb_ok+mb_iconerror);
+
+
+      end;
+  end;
+end;
+
+
+
+procedure TForm5.StringGrid1SelectCell(Sender: TObject; ACol, ARow: Integer;
+  var CanSelect: Boolean);
+begin
+  stringgrid1.Cells[0,rowmark]:='';
+  stringgrid1.Cells[0,ARow]:='»';
+  rowmark:=ARow;
+  guildsave:=stringgrid1.Cells[1,ARow];
+  info;
+end;
+
+procedure TForm5.BitBtn1Click(Sender: TObject);
+begin
+lista;
+end;
+
+procedure TForm5.BitBtn2Click(Sender: TObject);
+begin
+  muupdate.CommandText:=('delete from '+guildmember+' where '+G_name2+'='''+guildsave+'''');
+  muupdate.Execute;
+  muupdate.CommandText:=('delete from '+guild+' where '+G_name+'='''+guildsave+'''');
+  muupdate.Execute;
+  application.MessageBox(Pchar(confirm3),'Guild Editor',mb_ok);
+  lista;
+end;
+
+procedure TForm5.BitBtn3Click(Sender: TObject);
+begin
+  stringgrid1.Cells[0,rowmark]:='';
+  form2.caption:=EditGuildForm+' '+guildsave+'';
+  form2.show;
+  form2.iniciar;
+  form5.hide;
+end;
+
+procedure TForm5.BitBtn4Click(Sender: TObject);
+begin
+stringgrid1.Cells[0,rowmark]:='';
+form1.Enabled:=true;
+form5.Hide;
+end;
+
+procedure TForm5.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+form1.Enabled:=true;
+end;
+
+procedure TForm5.FormPaint(Sender: TObject);
+begin
+info;
+end;
+
+procedure tform5.info;
+var i:integer;
+s:string;
+begin
+  muquery.SQL.clear;
+  muquery.SQL.Add('select '+G_mark+','+G_Master+','+G_Score+' from '+guild+' where '+G_name+'='''+guildsave+'''');
+  muquery.Open;
+  label5.caption:=muquery.Fields[1].asstring;
+  label1.caption:=score+muquery.fields[2].asstring;
+  FillHexguild(muquery.fields[0]);
+  muquery.Close;
+  muquery.SQL.clear;
+  if vs<>'CMT' then begin
+    muquery.SQL.Add('select '+nome2+' from '+guildmember+' where '+G_name2+'='''+guildsave+'''');
+    muquery.Open;
+    label2.Caption:=members+inttostr(muquery.RecordCount);
+    muquery.close;
+  end else begin
+    muquery.SQL.Add('select '+nome2+','+G_Status+' from '+guildmember+' where '+G_name2+'='''+guildsave+'''');
+    muquery.Open;
+    s:='';
+    for i := 0 to muquery.RecordCount - 1 do
+      begin
+        if muquery.Fields[1].AsInteger=64 then label6.Caption:=assistent2+' '+muquery.Fields[0].asstring;
+        if muquery.Fields[1].AsInteger=32 then
+          if s='' then s:=muquery.Fields[0].asstring
+            else s:=s+' , '+muquery.Fields[0].asstring;
+        muquery.Next;
+      end;
+    label7.caption:=battlemasters+' '+s;
+    label2.Caption:=members+' '+inttostr(muquery.RecordCount);
+    muquery.close;
+  end;
+  label3.Caption:=guildsave;
+end;
+procedure tform5.iniciar;
+begin
+  stringgrid1.Cells[1,0]:=guildtext;
+  stringgrid1.Cells[2,0]:=score;
+  stringgrid1.Cells[0,1]:='»';
+  rowmark:=1;
+  lista;
+  guildsave:=stringgrid1.Cells[1,1];
+  info;
+  form5.Update;
+  info;
+end;
+
+procedure tform5.lista;
+var i:integer;
+begin
+  muquery.SQL.Clear;
+  muquery.SQL.Add('select '+G_name+','+G_Score+' from '+guild+'  order by '+G_Score+' desc ');
+  muquery.Open;
+  stringgrid1.rowcount:=muquery.recordcount+1 ;
+  for i := 0 to muquery.RecordCount - 1 do
+    begin
+      //aqui vai add na stringgrid ou db grid
+      stringgrid1.cells[1,i+1]:=muquery.fields[0].asstring;
+      stringgrid1.cells[2,i+1]:=muquery.fields[1].asstring;
+      muquery.next;
+    end;
+  muquery.Close;
+end;
+end.
