@@ -670,7 +670,7 @@ infor;
       if Combobox1.Items[i]=g then
       begin
         Combobox1.ItemIndex:=i;
-        form1.ComboBox1Change(Combobox1);
+        invform.ComboBox1Change(Combobox1);
       end;
   end;
 end;

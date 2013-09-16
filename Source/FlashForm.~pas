@@ -4617,11 +4617,6 @@ begin
     application.MessageBox(pchar(error29),pchar(errorcaption),mb_ok+mb_iconerror);
     Exit;
   end;
-  g:=ParamStr(1);
-  if (g<>'') and (g[1]='$') then
-  begin
-    bmsxpprogressbar1.progress:=100;
-    b:=false;
-  end;
+  
 end;
 end.

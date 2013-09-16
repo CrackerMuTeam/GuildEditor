@@ -1,9 +1,11 @@
 object Form2: TForm2
-  Left = 0
-  Top = 0
+  Left = 179
+  Top = 69
+  BorderIcons = [biSystemMenu, biMinimize]
+  BorderStyle = bsSingle
   Caption = 'Adicionar Guild'
-  ClientHeight = 314
-  ClientWidth = 457
+  ClientHeight = 316
+  ClientWidth = 460
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -105,6 +107,64 @@ object Form2: TForm2
       ParentColor = False
       Visible = False
     end
+    object GroupBox2: TGroupBox
+      Left = 151
+      Top = 78
+      Width = 133
+      Height = 121
+      Caption = 'Adicionar'
+      TabOrder = 2
+      Visible = False
+      object Label2: TLabel
+        Left = 8
+        Top = 13
+        Width = 43
+        Height = 13
+        Caption = 'Account:'
+      end
+      object Label3: TLabel
+        Left = 8
+        Top = 56
+        Width = 48
+        Height = 13
+        Caption = 'Character'
+      end
+      object ComboBox2: TComboBox
+        Left = 8
+        Top = 32
+        Width = 118
+        Height = 21
+        ItemHeight = 13
+        TabOrder = 0
+        OnChange = ComboBox2Change
+      end
+      object ComboBox3: TComboBox
+        Left = 8
+        Top = 72
+        Width = 118
+        Height = 21
+        ItemHeight = 13
+        TabOrder = 1
+      end
+      object BitBtn3: TBitBtn
+        Left = 7
+        Top = 93
+        Width = 56
+        Height = 20
+        Caption = 'OK'
+        TabOrder = 2
+        OnClick = BitBtn3Click
+      end
+      object BitBtn4: TBitBtn
+        Left = 69
+        Top = 96
+        Width = 56
+        Height = 20
+        Caption = 'Cancelar'
+        TabOrder = 3
+        OnClick = BitBtn4Click
+      end
+    end
     object BitBtn1: TBitBtn
       Left = 151
       Top = 16
@@ -163,64 +223,6 @@ object Form2: TForm2
       Visible = False
       OnClick = BitBtn7Click
     end
-    object GroupBox2: TGroupBox
-      Left = 151
-      Top = 78
-      Width = 133
-      Height = 121
-      Caption = 'Adicionar'
-      TabOrder = 2
-      Visible = False
-      object Label2: TLabel
-        Left = 8
-        Top = 13
-        Width = 43
-        Height = 13
-        Caption = 'Account:'
-      end
-      object Label3: TLabel
-        Left = 8
-        Top = 56
-        Width = 48
-        Height = 13
-        Caption = 'Character'
-      end
-      object ComboBox2: TComboBox
-        Left = 8
-        Top = 32
-        Width = 118
-        Height = 21
-        ItemHeight = 13
-        TabOrder = 0
-        OnChange = ComboBox2Change
-      end
-      object ComboBox3: TComboBox
-        Left = 8
-        Top = 72
-        Width = 118
-        Height = 21
-        ItemHeight = 13
-        TabOrder = 1
-      end
-      object BitBtn3: TBitBtn
-        Left = 8
-        Top = 96
-        Width = 56
-        Height = 20
-        Caption = 'OK'
-        TabOrder = 2
-        OnClick = BitBtn3Click
-      end
-      object BitBtn4: TBitBtn
-        Left = 69
-        Top = 96
-        Width = 56
-        Height = 20
-        Caption = 'Cancelar'
-        TabOrder = 3
-        OnClick = BitBtn4Click
-      end
-    end
   end
   object Edit2: TEdit
     Left = 55
@@ -270,10 +272,7 @@ object Form2: TForm2
       Align = alClient
       Color = clCaptionText
       ParentColor = False
-      ExplicitLeft = -127
-      ExplicitTop = -127
-      ExplicitWidth = 145
-      ExplicitHeight = 145
+      OnClick = PaintBox2Click
     end
   end
   object Panel2: TPanel

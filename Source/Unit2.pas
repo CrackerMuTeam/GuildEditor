@@ -56,6 +56,7 @@ type
     Label8: TLabel;
     Label9: TLabel;
     Label10: TLabel;
+    procedure PaintBox2Click(Sender: TObject);
     procedure ListBox1Click(Sender: TObject);
     procedure ListBox1DrawItem(Control: TWinControl; Index: Integer;
       Rect: TRect; State: TOwnerDrawState);
@@ -126,30 +127,7 @@ begin
   stosw
   end;
 end;
-{Function strByteSize(Value: Longint): String;
 
-Const
-KBYTE = Sizeof(Byte) shl 10;
-MBYTE = KBYTE shl 10;
-GBYTE = MBYTE shl 10;
-begin
-if Value > GBYTE then
-begin
-Result := FloatToStrF(Round(Value / GBYTE),ffNumber,6,0)+' GB';
-end
-else if Value > MBYTE then
-begin
-Result := FloatToStrF(Round(Value / MBYTE),ffNumber,6,0)+' MB';
-end
-else if Value > KBYTE then
-begin
-Result := FloatToStrF(Round(Value / KBYTE),ffNumber,6,0)+' KB';
-end
-else
-begin
-Result := FloatToStrF(Round(Value),ffNumber,6,0)+' Byte';
-end;
-end;    }
 procedure FillHexguild(item:Tfield); {Ìî³äÄ³¸öÕË»§µÄ²Ö¿â}
 type Tcharset=set of char;
 var A:tcharset;
@@ -198,6 +176,7 @@ begin
       end;
     end;
 end;
+
 procedure TForm2.ComboBox2Change(Sender: TObject);
 begin
 CharacterMostrar;
@@ -608,13 +587,18 @@ begin
   end;
 end;
 
+procedure TForm2.PaintBox2Click(Sender: TObject);
+begin
+cor:=$00666666
+end;
+
 procedure TForm2.Panel1Click(Sender: TObject);
 begin
 cor:=(sender as tpanel).color;
 end;
 
 procedure tform2.grid;
-begin
+begin                        
   paintbox1.canvas.Pen.width:=1;
   paintbox1.canvas.moveto(0,0);
   paintbox1.Canvas.LineTo(0,144);
@@ -654,12 +638,7 @@ begin
   paintbox1.canvas.moveto(0,144);
   paintbox1.Canvas.LineTo(144,144);
 
-   paintbox2.canvas.Pen.Color:=clwhite;
-    paintbox2.canvas.Pen.width:=2;
-  paintbox2.Canvas.MoveTo(0,0);
-  paintbox2.Canvas.LineTo(16,16);
-  paintbox2.Canvas.MoveTo(0,16);
-  paintbox2.Canvas.LineTo(16,0);
+
   form2.Update;
 end;
 procedure tform2.leracc;
@@ -737,11 +716,18 @@ var x,y,i:integer;
 begin
   paintbox1.canvas.Pen.width:=1;
   paintbox1.canvas.Pen.Color:=clblack;
+
   form2.grid;
   lerguild;
   leracc;
 
   cor:=$00666666;
+   paintbox2.canvas.Pen.Color:=clwhite;
+    paintbox2.canvas.Pen.width:=2;
+  paintbox2.Canvas.MoveTo(0,0);
+  paintbox2.Canvas.LineTo(16,16);
+  paintbox2.Canvas.MoveTo(0,16);
+  paintbox2.Canvas.LineTo(16,0);
   form2.Update;
 end;
 

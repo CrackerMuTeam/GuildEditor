@@ -4,7 +4,7 @@ object Form3: TForm3
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'Creditos'
-  ClientHeight = 162
+  ClientHeight = 165
   ClientWidth = 327
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -1857,7 +1857,7 @@ object Form3: TForm3
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 140
+    Top = 143
     Width = 327
     Height = 22
     Panels = <
@@ -1865,6 +1865,8 @@ object Form3: TForm3
         Text = 'Creditos'
         Width = 50
       end>
+    ExplicitTop = 141
+    ExplicitWidth = 325
   end
   object Button2: TButton
     Left = 144
